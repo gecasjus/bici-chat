@@ -1,10 +1,11 @@
 from fastapi import Request
 
-# receive userToken from firebase, save it, on logout delete
-# 
 
 class AuthService:
-    async def __call__():
+    _authId: str
+
+    async def get_auth_header(self, request: Request):
         # admin or null
-        print("I've been called!")
-        return 'zdrc dependency'
+        print(request.headers)
+
+        self._authId = 'value'

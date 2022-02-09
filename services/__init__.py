@@ -1,5 +1,5 @@
 from services.auth import AuthService
+from services.context import RequestContext
 
-def auth_service():
-    print("I've been called!")
-    return 'zdrc dependency'
+auth_service = AuthService()
+context_service = RequestContext
