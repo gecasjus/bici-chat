@@ -8,8 +8,3 @@ def get_messages(id: str, db: Session = Depends(get_db)):
 
 def get_chat(id: str, db: Session = Depends(get_db)):
     return db.query(models.Chat).filter(models.Chat.id == id).first()
-
-def insert(value, db: Session = Depends(get_db)):
-    db.add(value)
-    db.commit()
-    db.refresh(value)
