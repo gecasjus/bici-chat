@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from api import router
 import uvicorn
-from services import context_service
+from services.context import context_service
 
 app = FastAPI(middleware=context_service)
 

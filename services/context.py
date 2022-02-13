@@ -2,7 +2,7 @@ from starlette.middleware import Middleware
 from starlette_context import plugins
 from starlette_context.middleware import ContextMiddleware
 
-RequestContext = [
+context_service = [
     Middleware(
         ContextMiddleware,
         plugins=(

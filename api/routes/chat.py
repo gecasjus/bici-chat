@@ -1,16 +1,21 @@
-import models.entities as models
+import models as models
 from fastapi import status, HTTPException, APIRouter, Depends
 from models.schemas.message import ListOfMessagesInResponse
 from models.schemas.chat import Chat
-from models.schemas.item import Item
 from repositories.chat import ChatRepository
 from repositories.item import ItemRepository
-from services import auth_service
+from services.auth import auth_service
 
 router = APIRouter()
 
 @router.get("/{id}", response_model=ListOfMessagesInResponse, name="chats:retrieve-chats")
-def chats_controller(id, item_repo: ItemRepository = Depends(ItemRepository), chat_repo: ChatRepository = Depends(ChatRepository)):
+def retrieve_chats(id, item_repo: ItemRepository = Depends(ItemRepository), chat_repo: ChatRepository = Depends(ChatRepository)):
+    # pass item
+    print(auth_service._authId)
+
+    # chat_ids = chat_repo.get_chats_by_role(item_repo.get_item_by_id(id))
+
+    # get chat messages => message_repo
     return
 
 

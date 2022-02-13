@@ -1,13 +1,12 @@
-from models.schemas.item import Item
+from models import Chat
+from models.schemas.chat import ChatCreate
 from repositories.base import BaseRepository
 
 
-class ChatRepository(BaseRepository):
+class ChatRepository(BaseRepository[Chat, ChatCreate]):
 
-    def get_chats_by_role(self, item: Item, admin):
-        # if not 
-        # if item.admin_id is not admin:
-        #     self.get_db()
-            
+    def get_chats_by_role(self):     
         return
+
+chats = ChatRepository(Chat)
         

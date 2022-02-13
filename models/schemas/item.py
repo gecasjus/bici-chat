@@ -1,5 +1,5 @@
 from pydantic import BaseModel
 
-class Item(BaseModel):
+class ItemCreate(BaseModel):
     id: str
     admin_id: str

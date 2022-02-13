@@ -1,34 +1,28 @@
-from config import SessionLocal
+from typing import Type, TypeVar, Generic
 
-class BaseRepository:
-    def get_db():
-        db = SessionLocal()
-        try:
-            yield db
-        finally:
-            db.close()
+from pydantic import BaseModel
+from models.base_model import Base
+from sqlalchemy.orm import Session
 
-    def save(self):
-        print(self)
+ModelType = TypeVar("ModelType", bound=Base)
+CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
 
-        # self.get_db(self)
-        # self.get_db.commit()
-        # self.get_db.refresh(self)
-    
-    # each individual repo
+class BaseRepository(Generic[ModelType, CreateSchemaType]):
+    def __init__(self, model: Type[ModelType]):
+        self.model = model
 
+    def get(self, db: Session):
+        return db.query(self.model).filter(self.model.id == id).first()
 
+    def save(self, db: Session, payload: CreateSchemaType) -> ModelType:
+        db_obj = self.model(**payload)
+        db.add(db_obj)
+        db.commit()
+        db.refresh(db_obj)
+        return db_obj
 
-
-#     value = db_user = models.User(email=user.email, hashed_password=fake_hashed_password)
-#     db.add(db_user)
-#     db.commit()
-#     db.refresh(db_user)
-#     return db_user
-
-
-
-#         def get_messages(id: str, db: Session = Depends(get_db)):
-#     return db.query(models.Message).filter(models.Message.chat_id == id).all()
-
-# def get_chat(id: str, db: Session = Depends(get_db)):
+    def remove(self, db: Session, *, id: int) -> ModelType:
+        obj = db.query(self.model).get(id)
+        db.delete(obj)
+        db.commit()
+        return obj

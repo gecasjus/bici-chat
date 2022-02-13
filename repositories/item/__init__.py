@@ -1,7 +1,9 @@
 from repositories.base import BaseRepository
+from models import Item
+from models.schemas.item import ItemCreate
 
-class ItemRepository(BaseRepository):
-   
-    def get_item_by_id(self, id):
-        print('called item repo', id)
-        return 'dasdas'
+class ItemRepository(BaseRepository[Item, ItemCreate]):
+    def __init__(self):
+        pass
+
+item = ItemRepository(Item)

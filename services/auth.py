@@ -1,11 +1,14 @@
-from fastapi import Request
+from starlette.requests import Request
 
 
 class AuthService:
-    _authId: str
+    _authId = lambda s: s or ''
 
-    async def get_auth_header(self, request: Request):
+    def get_auth_header(self, request:Request):
         # admin or null
-        print(request.headers)
+        headers = request.headers
 
-        self._authId = 'value'
+        if headers['Bearer']:
+            self._authId = headers['Bearer']
+                   
+auth_service = AuthService()

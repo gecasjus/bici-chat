@@ -1,5 +1,5 @@
 from fastapi import status, HTTPException, APIRouter, Depends
-import models.entities as models
+import models as models
 from models.schemas.message import (MessageInResponse, Message, ListOfMessagesInResponse)
 from models.schemas.chat import Chat
 from models.schemas.item import Item

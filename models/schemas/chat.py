@@ -1,5 +1,5 @@
 from pydantic import BaseModel
 
-class Chat(BaseModel):
+class ChatCreate(BaseModel):
     initializer: str
     item_id: str
