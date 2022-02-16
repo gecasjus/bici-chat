@@ -2,7 +2,7 @@ from fastapi import status, APIRouter, Depends
 from models.schemas.item import ItemCreate
 from dependencies.db import get_db
 from sqlalchemy.orm import Session
-from repositories.item import ItemRepository 
+from repositories.item import ItemRepository
 
 router = APIRouter()
 

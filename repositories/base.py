@@ -1,4 +1,4 @@
-from typing import Type, TypeVar, Generic
+from typing import  Type, TypeVar, Generic
 
 from pydantic import BaseModel
 from core.database import Base
@@ -7,6 +7,8 @@ from sqlalchemy.orm import Session
 ModelType = TypeVar("ModelType", bound=Base)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
 
+
+# psycopg2.error handling => ForeignKeyValuation
 class BaseRepository(Generic[ModelType, CreateSchemaType]):
     def __init__(self, model: Type[ModelType]):
         self.model = model
@@ -19,6 +21,7 @@ class BaseRepository(Generic[ModelType, CreateSchemaType]):
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)
+        
         return db_obj
 
     def remove(self, db: Session, *, id: str) -> ModelType:

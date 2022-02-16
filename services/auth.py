@@ -14,5 +14,7 @@ class AuthService:
 
         if token:
             self._authId = token
+        else:
+            raise HTTPException(status_code=401, detail=UNAUTHORIZED)
 
 auth_service = AuthService()
