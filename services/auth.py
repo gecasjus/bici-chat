@@ -1,14 +1,18 @@
+from fastapi import HTTPException
 from starlette.requests import Request
-
+from resources.response import UNAUTHORIZED
 
 class AuthService:
-    _authId = lambda s: s or ''
-
+    _authId = None
+    
     def get_auth_header(self, request:Request):
-        # admin or null
-        headers = request.headers
+        if "authorization" not in request.headers:
+            raise HTTPException(status_code=401, detail=UNAUTHORIZED)
 
-        if headers['Bearer']:
-            self._authId = headers['Bearer']
-                   
+        bearer = request.headers['authorization']
+        token = bearer.split()[1]
+
+        if token:
+            self._authId = token
+
 auth_service = AuthService()

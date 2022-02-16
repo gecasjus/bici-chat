@@ -1,10 +1,17 @@
-from fastapi import status, HTTPException, APIRouter
-import models as models
-from models.schemas.chat import Chat
-from models.schemas.item import Item
+from fastapi import status, APIRouter, Depends
+from models.schemas.item import ItemCreate
+from dependencies.db import get_db
+from sqlalchemy.orm import Session
+from repositories.item import ItemRepository 
 
 router = APIRouter()
 
-@router.post("/item/create", status_code=status.HTTP_201_CREATED)
-def create_item(item: Item):
+@router.post("/create", status_code=status.HTTP_201_CREATED)
+def create_item(
+    item: ItemCreate,
+    item_repo: ItemRepository = Depends(ItemRepository),
+    db: Session = Depends(get_db),
+    ):
+    new_item = item_repo.save(item, db)
+    return new_item
   

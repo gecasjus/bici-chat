@@ -1,0 +1,1 @@
+UNAUTHORIZED = '401 Unauthorized.'
