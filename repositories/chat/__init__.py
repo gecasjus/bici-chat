@@ -20,11 +20,11 @@ class ChatRepository(BaseRepository[Chat, ChatCreate]):
         else:     
             return db.query(self.model).filter(self.model.initializer == auth_service._authId).first()
 
-
-    def save_chat(self, payload, id, db: Session):
-        db_obj = self.model(**payload.dict(), item_id = id)
-        db.add(db_obj)
-        db.commit()
-        db.refresh(db_obj)
-        return db_obj
+    
+    def check_existence(self, id: str, db: Session = Depends(get_db)):
+        chat = db.query(self.model).filter(self.model.item_id == id, self.model.initializer == auth_service._authId).first()
         
+        if chat:
+            return True
+
+        return False

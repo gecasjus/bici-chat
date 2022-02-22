@@ -1,4 +1,6 @@
+.gitignore/
 venv/
 .vscode/
-.env
+.env/
+Pipfile
 
