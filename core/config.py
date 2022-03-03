@@ -1,7 +1,28 @@
-from pydantic import BaseSettings
+from typing import Any, Dict, Optional
+from pydantic import BaseSettings, PostgresDsn, validator
+
+DATABASE_URL="postgresql://postgres:justas@localhost/postgres"
 
 class Settings(BaseSettings):
-    database_url: str
+    api_v1: str = "/api/v1"
+    database_hostname: str
+    database_password: str
+    database_name: str
+    database_username: str
+
+    DATABASE_URI: Optional[PostgresDsn] = None
+
+    @validator("DATABASE_URI", pre=True)
+    def assemble_db_connection(cls, v: Optional[str], values: Dict[str, Any]):
+        if isinstance(v, str):
+            return v
+        return PostgresDsn.build(
+            scheme="postgresql",
+            user=values.get("database_username"),
+            password=values.get("database_password"),
+            host=values.get("database_hostname"),
+            path=f"/{values.get('database_name') or ''}",
+        )
 
     class Config:
         env_file = '.env'

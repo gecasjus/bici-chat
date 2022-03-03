@@ -7,8 +7,6 @@ from sqlalchemy.orm import Session
 ModelType = TypeVar("ModelType", bound=Base)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
 
-
-# psycopg2.error handling => ForeignKeyValuation
 class BaseRepository(Generic[ModelType, CreateSchemaType]):
     def __init__(self, model: Type[ModelType]):
         self.model = model
