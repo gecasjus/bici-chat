@@ -7,5 +7,5 @@ from services.auth import auth_service
 router = APIRouter()
 
 router.include_router(chat_router, tags=["chat"], prefix="/chat", dependencies=[Depends(auth_service.get_auth_header)])
-router.include_router(item_router, tags=["item"], prefix="/item")
+router.include_router(item_router, tags=["item"], prefix="/item", dependencies=[Depends(auth_service.get_auth_header)])
 router.include_router(message_router, tags=["message"], prefix="/message", dependencies=[Depends(auth_service.get_auth_header)])

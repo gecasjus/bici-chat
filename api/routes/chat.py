@@ -1,7 +1,6 @@
 from datetime import datetime
 import json
 
-from fastapi.encoders import jsonable_encoder
 from fastapi import status, APIRouter, Depends, HTTPException
 from models.schemas.chat import ChatCreate, Chat
 from models.schemas.message import Message
@@ -14,7 +13,6 @@ from resources.response import CHAT_EXISTS
 
 router = APIRouter()
 
-# item and chats join => into single query
 @router.get("/{id}", name="chats:retrieve-chats")
 def retrieve_chats(
     id, 
@@ -27,7 +25,7 @@ def retrieve_chats(
     chat_ids = chats_repo.get_by_role(item)
 
     # get chat messages => message_repo
-    return
+    return 
 
 @router.post("/{id}/create", status_code=status.HTTP_201_CREATED)
 def create_chat(

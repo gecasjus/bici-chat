@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 
 ModelType = TypeVar("ModelType", bound=Base)
 CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
+UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
 
 class BaseRepository(Generic[ModelType, CreateSchemaType]):
     def __init__(self, model: Type[ModelType]):
