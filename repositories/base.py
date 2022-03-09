@@ -1,6 +1,6 @@
 from typing import  Type, TypeVar, Generic
-
 from pydantic import BaseModel
+from api.exceptions.validation import database_error
 from core.database import Base
 from sqlalchemy.orm import Session
 
@@ -15,6 +15,7 @@ class BaseRepository(Generic[ModelType, CreateSchemaType]):
     def get(self, id: str, db: Session,):
         return db.query(self.model).filter(self.model.id == id).first()
 
+    @database_error
     def save(self, payload: CreateSchemaType, db: Session) -> ModelType:
         db_obj = self.model(**payload.dict())
         db.add(db_obj)

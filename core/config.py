@@ -1,8 +1,6 @@
 from typing import Any, Dict, Optional
 from pydantic import BaseSettings, PostgresDsn, validator
 
-DATABASE_URL="postgresql://postgres:justas@localhost/postgres"
-
 class Settings(BaseSettings):
     api_v1: str = "/api/v1"
     database_hostname: str

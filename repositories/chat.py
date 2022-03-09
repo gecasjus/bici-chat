@@ -1,36 +1,44 @@
-import json
-from fastapi import Depends
-from models.domain import Chat, Item
-from models.schemas.chat import Chat as ChatSchema
+from fastapi.encoders import jsonable_encoder
+from fastapi import Depends, HTTPException
+from api.exceptions.validation import database_error
+from models.tables import Chat, Item
 from models.schemas.chat import ChatCreate
-from models.schemas.message import MessageCreate
+from models.schemas.message import Message
 from repositories.base import BaseRepository
 from services.auth import auth_service
 from sqlalchemy.orm import Session
 from dependencies.db import get_db
+from resources.response import NOT_FOUND
 
 class ChatRepository(BaseRepository[Chat, ChatCreate]):
     def __init__(self):
         self.model = Chat
 
-    def add_content(self, payload: MessageCreate, db_obj: ChatSchema, db: Session):
-        content = db_obj.dict(exclude_unset=True).get('messages')
-        content_list = json.loads(content)
-        new_content = content_list.append(payload)
+    @database_error
+    def save_message(self, id, payload: Message, db: Session):
 
-        setattr(db_obj, 'messages', json.dumps(new_content))
+        chat = self.get(id, db)
 
-        db.add(db_obj)
+        if not chat:
+            raise HTTPException(status_code=404, detail=NOT_FOUND)
+
+        messages = jsonable_encoder(chat).get('messages')
+        
+        messages.append(payload.dict(exclude_unset=True))
+
+        setattr(chat, 'messages', messages)
+
+        db.add(chat)
         db.commit()
-        db.refresh()
+        db.refresh(chat)
 
-        return db_obj
+        return chat
 
 
     def get_by_role(
         self, 
         item: Item,
-        db: Session = Depends(get_db)
+        db: Session
         ):
         if item.admin_id == auth_service._authId:
             return db.query(self.model).filter(self.model.item_id == item.id).all()

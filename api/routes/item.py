@@ -1,5 +1,5 @@
 from fastapi import status, APIRouter, Depends
-from models.schemas.item import ItemCreate, Item
+from models.schemas.item import Item
 from dependencies.db import get_db
 from sqlalchemy.orm import Session
 from repositories.item import ItemRepository
@@ -13,11 +13,13 @@ def create_item(
     item_repo: ItemRepository = Depends(ItemRepository),
     db: Session = Depends(get_db),
     ):
-    item = Item(
+ 
+    new_item = item_repo.save(
+        Item(
         id = id,
         admin_id = auth_service._authId
-    )
+        ), 
+        db)
 
-    new_item = item_repo.save(item, db)
     return new_item
   

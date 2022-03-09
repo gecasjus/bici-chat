@@ -22,10 +22,9 @@ def retrieve_chats(
 ):
     item = item_repo.get(id, db)
 
-    chat_ids = chats_repo.get_by_role(item)
+    chats = chats_repo.get_by_role(item, db)
 
-    # get chat messages => message_repo
-    return 
+    return chats
 
 @router.post("/{id}/create", status_code=status.HTTP_201_CREATED)
 def create_chat(
