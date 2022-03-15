@@ -4,6 +4,3 @@ class Message(BaseModel):
     content: str
     sender_id: str
     created_at: str
-
-class MessageCreate(BaseModel):
-    content: str

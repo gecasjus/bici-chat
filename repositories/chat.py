@@ -1,11 +1,12 @@
 from fastapi.encoders import jsonable_encoder
 from fastapi import Depends, HTTPException
-from api.exceptions.validation import database_error
-from models.tables import Chat, Item
-from models.schemas.chat import ChatCreate
-from models.schemas.message import Message
+from api.exceptions.db_exception import database_error
+from models.chat.chat import Chat
+from models.item.item import Item
+from models.chat.chat_create import ChatCreate
+from models.message.message import Message
 from repositories.base import BaseRepository
-from services.auth import auth_service
+from services.auth_service import auth_service
 from sqlalchemy.orm import Session
 from dependencies.db import get_db
 from resources.response import NOT_FOUND
@@ -15,7 +16,7 @@ class ChatRepository(BaseRepository[Chat, ChatCreate]):
         self.model = Chat
 
     @database_error
-    def save_message(self, id, payload: Message, db: Session):
+    def save_message(self, id: str, payload: Message, db: Session):
 
         chat = self.get(id, db)
 

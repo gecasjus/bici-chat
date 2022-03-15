@@ -1,7 +1,8 @@
 from fastapi import Depends, status, APIRouter
-from models.schemas.message import MessageCreate, Message
+from models.message.message import Message
+from models.message.message_create import MessageCreate
 from datetime import datetime
-from services.auth import auth_service
+from services.auth_service import auth_service
 from sqlalchemy.orm import Session
 from repositories.chat import ChatRepository
 from dependencies.db import get_db

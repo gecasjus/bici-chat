@@ -2,13 +2,14 @@ from datetime import datetime
 import json
 
 from fastapi import status, APIRouter, Depends, HTTPException
-from models.schemas.chat import ChatCreate, Chat
-from models.schemas.message import Message
+from models.chat.chat import Chat
+from models.chat.chat_create import ChatCreate
+from models.message.message import Message
 from sqlalchemy.orm import Session
 from repositories.chat import ChatRepository
 from repositories.item import ItemRepository
 from dependencies.db import get_db
-from services.auth import auth_service
+from services.auth_service import auth_service
 from resources.response import CHAT_EXISTS
 
 router = APIRouter()

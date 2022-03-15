@@ -1,12 +1,10 @@
 from typing import  Type, TypeVar, Generic
-from pydantic import BaseModel
-from api.exceptions.validation import database_error
-from core.database import Base
+from api.exceptions.db_exception import database_error
 from sqlalchemy.orm import Session
 
-ModelType = TypeVar("ModelType", bound=Base)
-CreateSchemaType = TypeVar("CreateSchemaType", bound=BaseModel)
-UpdateSchemaType = TypeVar("UpdateSchemaType", bound=BaseModel)
+ModelType = TypeVar("ModelType")
+CreateSchemaType = TypeVar("CreateSchemaType")
+UpdateSchemaType = TypeVar("UpdateSchemaType")
 
 class BaseRepository(Generic[ModelType, CreateSchemaType]):
     def __init__(self, model: Type[ModelType]):
@@ -14,17 +12,19 @@ class BaseRepository(Generic[ModelType, CreateSchemaType]):
 
     def get(self, id: str, db: Session,):
         return db.query(self.model).filter(self.model.id == id).first()
+    
+    def get(self, id: str, db: Session,):
+        return db.query(self.model).filter(self.model.id == id).first()
 
     @database_error
     def save(self, payload: CreateSchemaType, db: Session) -> ModelType:
-        db_obj = self.model(**payload.dict())
-        db.add(db_obj)
+        db.add(payload)
         db.commit()
-        db.refresh(db_obj)
+        db.refresh(payload)
         
-        return db_obj
+        return payload
 
-    def remove(self, db: Session, *, id: str) -> ModelType:
+    def remove(self, id: str, db: Session) -> ModelType:
         obj = db.query(self.model).get(id)
         db.delete(obj)
         db.commit()

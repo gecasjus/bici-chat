@@ -4,7 +4,7 @@ import uvicorn
 from starlette_context import plugins
 from starlette.middleware.cors import CORSMiddleware
 from starlette_context.middleware import ContextMiddleware
-from api.exceptions.validation import validation_exception_handler
+from api.exceptions.http_exception import http_error_handler
 from fastapi.exceptions import RequestValidationError
 from core.database import init_db
 
@@ -27,7 +27,7 @@ def init() -> FastAPI:
 
     application.include_router(router)
 
-    application.add_exception_handler(RequestValidationError, validation_exception_handler)
+    application.add_exception_handler(RequestValidationError, http_error_handler)
 
     init_db()
 
