@@ -1,6 +1,4 @@
 from datetime import datetime
-import json
-
 from fastapi import status, APIRouter, Depends, HTTPException
 from models.chat.chat import Chat
 from models.chat.chat_create import ChatCreate
@@ -11,6 +9,7 @@ from repositories.item import ItemRepository
 from dependencies.db import get_db
 from services.auth_service import auth_service
 from resources.response import CHAT_EXISTS
+from uuid import uuid1
 
 router = APIRouter()
 
@@ -49,7 +48,7 @@ def create_chat(
     new_chat = Chat(
         initializer = auth_service._authId,
         item_id = id,
-        messages = json.dumps([message.dict()]),
+        messages = {str(uuid1()): dict(message)}
     )
 
     response = chats_repo.save(new_chat, db)
