@@ -5,7 +5,8 @@ from sqlalchemy import Column, String
 from dataclasses import dataclass
 from dataclasses import field
 from core.database import mapper_registry
-from alchemy import JSONEncodedDict, MutableDict
+from alchemy import MutableList
+from sqlalchemy.dialects.postgresql import JSONB
 
 @mapper_registry.mapped
 @dataclass
@@ -15,5 +16,5 @@ class Chat:
 
     item_id: str = field(metadata={"sa": Column('item_id', String, ForeignKey('item.id', ondelete="CASCADE"), nullable=False)})
     initializer: str = field(metadata={"sa": Column('initializer', String, nullable=False)})
-    messages: Json = field(metadata={"sa": Column('messages', MutableDict.as_mutable(JSONEncodedDict), nullable=True)})
+    messages: Json = field(metadata={"sa": Column('messages', MutableList.as_mutable(JSONB), nullable=True)})
     id: str = field(default=str(uuid.uuid4()), metadata={"sa": Column('id', String, primary_key=True, nullable=False)})

@@ -1,3 +1,4 @@
+from urllib import response
 from fastapi import Depends, status, APIRouter
 from models.message.message import Message
 from models.message.message_create import MessageCreate
@@ -10,21 +11,13 @@ from dependencies.db import get_db
 router = APIRouter()
  
 @router.put("/{id}/create", status_code=status.HTTP_201_CREATED)
-def create_message(
+def append_message(
     message: MessageCreate,
     id: str,
     chat_repo: ChatRepository = Depends(ChatRepository),
     db: Session = Depends(get_db)
     ):
 
-    updated_chat = chat_repo.save_message(
-        id,
-        Message(
-        content=message.content,
-        sender_id=auth_service._authId, 
-        created_at=datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        ),
-        db
-        )
+    response = chat_repo.append_message(id, message.content, db)
     
-    return updated_chat
+    return response

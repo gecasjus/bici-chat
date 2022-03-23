@@ -3,10 +3,8 @@ from api.exceptions.db_exception import database_error
 from sqlalchemy.orm import Session
 
 ModelType = TypeVar("ModelType")
-CreateSchemaType = TypeVar("CreateSchemaType")
-UpdateSchemaType = TypeVar("UpdateSchemaType")
 
-class BaseRepository(Generic[ModelType, CreateSchemaType]):
+class BaseRepository(Generic[ModelType]):
     def __init__(self, model: Type[ModelType]):
         self.model = model
 
@@ -17,7 +15,7 @@ class BaseRepository(Generic[ModelType, CreateSchemaType]):
         return db.query(self.model).filter(self.model.id == id).first()
 
     @database_error
-    def save(self, payload: CreateSchemaType, db: Session) -> ModelType:
+    def save(self, payload, db: Session) -> ModelType:
         db.add(payload)
         db.commit()
         db.refresh(payload)

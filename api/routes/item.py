@@ -1,9 +1,7 @@
 from fastapi import status, APIRouter, Depends
-from models.item.item import Item
 from dependencies.db import get_db
 from sqlalchemy.orm import Session
 from repositories.item import ItemRepository
-from services.auth_service import auth_service
 
 router = APIRouter()
 
@@ -14,12 +12,7 @@ def create_item(
     db: Session = Depends(get_db),
     ):
  
-    new_item = item_repo.save(
-        Item(
-        id = id,
-        admin_id = auth_service._authId
-        ), 
-        db)
+    response = item_repo.save(id, db)
 
-    return new_item
+    return response
   

@@ -17,8 +17,13 @@ depends_on = None
 
 
 def upgrade():
+    op.create_table('item', 
+    sa.Column('id', sa.String(), nullable=False, primary_key=True),
+    sa.Column('admin_id', sa.String(), nullable=False)
+    )
     pass
 
 
 def downgrade():
+    op.drop_table('item')
     pass
