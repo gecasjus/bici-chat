@@ -3,7 +3,7 @@ from starlette.requests import Request
 from resources.response import UNAUTHORIZED
 
 class AuthService:
-    _authId = None
+    authId = None
     
     def get_auth_header(self, request:Request):
         if "authorization" not in request.headers:
@@ -13,7 +13,7 @@ class AuthService:
         token = bearer.split()[1]
 
         if token:
-            self._authId = token
+            self.authId = token
         else:
             raise HTTPException(status_code=401, detail=UNAUTHORIZED)
 

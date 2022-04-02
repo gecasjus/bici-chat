@@ -1,9 +1,6 @@
 from urllib import response
 from fastapi import Depends, status, APIRouter
-from models.message.message import Message
 from models.message.message_create import MessageCreate
-from datetime import datetime
-from services.auth_service import auth_service
 from sqlalchemy.orm import Session
 from repositories.chat import ChatRepository
 from dependencies.db import get_db
@@ -18,6 +15,6 @@ def append_message(
     db: Session = Depends(get_db)
     ):
 
-    response = chat_repo.append_message(id, message.content, db)
+    response = chat_repo.append_message(id, message, db)
     
     return response

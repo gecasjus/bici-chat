@@ -1,7 +1,7 @@
 from fastapi import status, APIRouter, Depends
 from models.chat.chat import Chat
-from models.chat.chat_create import ChatCreate
 from sqlalchemy.orm import Session
+from models.message.message_create import MessageCreate
 from repositories.chat import ChatRepository
 from repositories.item import ItemRepository
 from dependencies.db import get_db
@@ -17,18 +17,18 @@ def retrieve_chats(
 ):
     item = item_repo.get(id, db)
 
-    response = chats_repo.get_by_role(item, db)
+    response = chats_repo.get(item, db)
 
     return response
 
 @router.post("/{id}/create", status_code=status.HTTP_201_CREATED)
 def create_chat(
-    chat: ChatCreate, 
+    message: MessageCreate, 
     id: str, 
     chats_repo: ChatRepository = Depends(ChatRepository),
     db: Session = Depends(get_db) 
     ) -> Chat:
-    response = chats_repo.save(id, chat.content, db)
+    response = chats_repo.save(id, message, db)
 
     return response
 
